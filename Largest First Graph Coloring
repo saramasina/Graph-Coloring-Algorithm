@@ -1,0 +1,177 @@
+import java.util.*;
+
+class Edge {
+    private final int destId;
+
+    public Edge(int dest) {
+        this.destId = dest;
+    }
+
+    public int getDestId() {
+        return destId;
+    }
+}
+
+class Vertex {
+    private final int vertexId;
+    private final String name;
+    private int color;
+    private int numConnections;
+    private final List<Edge> edges;
+
+    public Vertex(int id, String name) {
+        this.vertexId = id;
+        this.name = name;
+        this.color = -1; // Uncolored initially
+        this.numConnections = 0;
+        this.edges = new ArrayList<>();
+    }
+
+    public int getId() {
+        return vertexId;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public int getColor() {
+        return color;
+    }
+
+    public void setColor(int color) {
+        this.color = color;
+    }
+
+    public int getNumConnections() {
+        return numConnections;
+    }
+
+    public void addEdge(int destId) {
+        edges.add(new Edge(destId));
+        numConnections++;
+    }
+
+    public List<Edge> getEdges() {
+        return edges;
+    }
+
+    public void printEdgeList() {
+        System.out.print("[");
+        for (Edge edge : edges) {
+            System.out.print(edge.getDestId() + " -> ");
+        }
+        System.out.println("]");
+    }
+}
+
+class Graph {
+    private final List<Vertex> vertices;
+
+    public Graph() {
+        this.vertices = new ArrayList<>();
+    }
+
+    public void addVertex(Vertex vertex) {
+        for (Vertex v : vertices) {
+            if (v.getId() == vertex.getId()) return;
+        }
+        vertices.add(vertex);
+    }
+
+    public Vertex getVertex(int id) {
+        for (Vertex vertex : vertices) {
+            if (vertex.getId() == id) return vertex;
+        }
+        return null;
+    }
+
+    public void addEdge(int sourceId, int destId) {
+        Vertex source = getVertex(sourceId);
+        Vertex dest = getVertex(destId);
+        if (source != null && dest != null) {
+            source.addEdge(destId);
+            dest.addEdge(sourceId);
+        }
+    }
+
+    public void printGraph() {
+        for (Vertex vertex : vertices) {
+            System.out.print(vertex.getName() + " (" + vertex.getId() + ") --> ");
+            vertex.printEdgeList();
+        }
+    }
+
+    public List<Vertex> getVertices() {
+        return vertices;
+    }
+}
+
+ class LargestFirstColoring {
+
+    public static void largestFirstColoringAlgorithm(Graph graph) {
+        List<Vertex> vertices = new ArrayList<>(graph.getVertices());
+
+        // Sort vertices by the number of connections in descending order
+        vertices.sort((v1, v2) -> v2.getNumConnections() - v1.getNumConnections());
+
+        for (Vertex vertex : vertices) {
+            Set<Integer> usedColors = new HashSet<>();
+
+            // Find colors used by adjacent vertices
+            for (Edge edge : vertex.getEdges()) {
+                Vertex neighbor = graph.getVertex(edge.getDestId());
+                if (neighbor.getColor() != -1) {
+                    usedColors.add(neighbor.getColor());
+                }
+            }
+
+            // Assign the smallest available color
+            int color = 0;
+            while (usedColors.contains(color)) {
+                color++;
+            }
+            vertex.setColor(color);
+        }
+
+        // Print the result
+        System.out.println("Vertex colors:");
+        for (Vertex vertex : vertices) {
+            System.out.println(vertex.getName() + " (ID: " + vertex.getId() + ") -> Color: " + vertex.getColor());
+        }
+    }
+
+    public static void main(String[] args) {
+        Graph graph = new Graph();
+
+        // Add vertices
+        graph.addVertex(new Vertex(0, "a"));
+        graph.addVertex(new Vertex(1, "b"));
+        graph.addVertex(new Vertex(2, "c"));
+        graph.addVertex(new Vertex(3, "d"));
+        graph.addVertex(new Vertex(4, "e"));
+        graph.addVertex(new Vertex(5, "f"));
+        graph.addVertex(new Vertex(6, "g"));
+        graph.addVertex(new Vertex(7, "h"));
+
+        // Add edges
+        graph.addEdge(0, 4);
+        graph.addEdge(0, 6);
+        graph.addEdge(0, 5);
+        graph.addEdge(1, 4);
+        graph.addEdge(1, 7);
+        graph.addEdge(2, 6);
+        graph.addEdge(3, 5);
+        graph.addEdge(3, 6);
+        graph.addEdge(5, 6);
+        graph.addEdge(5, 7);
+        graph.addEdge(6, 7);
+        graph.addEdge(1, 2);
+
+        // Print the graph
+        graph.printGraph();
+
+        // Apply the coloring algorithm
+        largestFirstColoringAlgorithm(graph);
+    }
+}
