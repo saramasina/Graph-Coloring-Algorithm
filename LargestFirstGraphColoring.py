@@ -1,3 +1,6 @@
+import matplotlib.pyplot as plt
+import networkx as nx
+
 class Edge:
     def __init__(self, dest_id):
         self.dest_id = dest_id
@@ -94,6 +97,26 @@ def largest_first_coloring_algorithm(graph):
     for vertex in vertices:
         print(f"{vertex.get_name()} (ID: {vertex.get_id()}) -> Culoare: {vertex.get_color()}")
 
+def visualize_colored_graph(graph):
+    G = nx.Graph()
+
+    # Adaugă noduri și muchii la obiectul NetworkX
+    for vertex in graph.get_vertices():
+        G.add_node(vertex.get_id(), label=vertex.get_name(), color=vertex.get_color())
+
+    for vertex in graph.get_vertices():
+        for edge in vertex.get_edges():
+            G.add_edge(vertex.get_id(), edge.get_dest_id())
+
+    # Extrage culorile nodurilor
+    colors = [data['color'] for _, data in G.nodes(data=True)]
+    labels = nx.get_node_attributes(G, 'label')
+
+    # Desenare graf
+    pos = nx.spring_layout(G)  # Poziționare automată
+    nx.draw(G, pos, with_labels=True, labels=labels, node_color=colors, cmap=plt.cm.rainbow, node_size=700, font_size=10)
+    plt.show()
+
 
 if __name__ == "__main__":
     graph = Graph()
@@ -127,3 +150,6 @@ if __name__ == "__main__":
 
     # Aplică algoritmul de colorare
     largest_first_coloring_algorithm(graph)
+
+    # Vizualizează graful colorat
+    visualize_colored_graph(graph)
