@@ -35,8 +35,8 @@ def generate_hard_to_color_graph(n, p, clique_size):
 
 for i in range(7):
         # Generăm numărul aleatoriu de noduri și muchii
-        num_nodes = random.randint(1, 60)
-        num_edges = random.randint(1, 1000)  # Maximum edges for the graph
+        num_nodes = random.randint(1, 35)
+        num_edges = random.randint(1, 200)  # Maximum edges for the graph
 
         # Creăm graful aleatoriu
         graph = nx.gnm_random_graph(num_nodes, num_edges)
@@ -48,7 +48,7 @@ for i in range(7):
 
 for i in range(7):
         # Generăm numărul aleatoriu de noduri și muchii
-        num_nodes = random.randint(1, 60)
+        num_nodes = random.randint(1, 35)
 
         # Creăm graful aleatoriu
         graph = nx.complete_graph(num_nodes)
@@ -63,7 +63,7 @@ for i in range(7):
         num_nodes = random.randint(1, 60)
 
         # Creăm graful aleatoriu
-        graph =G = G = nx.erdos_renyi_graph(num_nodes, p=0.05)  # 5% șansă ca o muchie să existe
+        graph = nx.erdos_renyi_graph(num_nodes, p=0.05)  # 5% șansă ca o muchie să existe
 
         # Salvăm graful în format edge list
         file_path = os.path.join("C:/Users/Sara/Graph-Coloring-Algorithm/input/sparse", f"sparse_graph{i+1}.edgelist")
@@ -72,7 +72,8 @@ for i in range(7):
 
 for i in range(13):
         # Generăm numărul aleatoriu de noduri și muchii
-        num_nodes = random.randint(1, 15)
+        num_nodes = random.randint(1, 30)
+        print(num_nodes)
 
         # Creăm graful aleatoriu
         graph = nx.mycielski_graph(num_nodes)
@@ -84,7 +85,8 @@ for i in range(13):
 
 for i in range(13):
         # Generăm numărul aleatoriu de noduri și muchii
-        num_nodes = random.randint(1, 20)
+        num_nodes = random.randint(1, 30)
+        print(num_nodes)
 
         # Creăm graful aleatoriu
         graph = generate_hard_to_color_graph(num_nodes, 0.2, 6)

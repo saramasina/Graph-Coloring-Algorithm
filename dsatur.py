@@ -25,5 +25,8 @@ def dsatur_coloring(graph):
         for neighbor in graph.neighbors(current_node):
             if neighbor not in coloring:
                 saturation[neighbor] += 1
+                
+        
+    distinct_values = len(set(coloring.values()))
 
-    return coloring
+    return coloring, distinct_values
